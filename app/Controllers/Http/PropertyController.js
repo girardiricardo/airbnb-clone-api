@@ -2,14 +2,12 @@
 
 const Property = use('App/Models/Property')
 
-/**
- * Resourceful controller for interacting with properties
- */
 class PropertyController {
   async index ({ request, response, view }) {
     const { latitude, longitude } = request.all()
     
     const properties = Property.query()
+      .with('images')
       .nearBy(latitude, longitude, 10)
       .fetch()
 
