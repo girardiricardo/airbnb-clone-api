@@ -6,31 +6,31 @@ const Property = use('App/Models/Property')
  * Resourceful controller for interacting with properties
  */
 class PropertyController {
-  /**
-   * Show a list of all properties.
-   * GET properties
-   */
   async index ({ request, response, view }) {
     const { latitude, longitude } = request.all()
     
     const properties = Property.query()
       .nearBy(latitude, longitude, 10)
-      .fecth()
+      .fetch()
 
     return properties
   }
 
-  /**
-   * Create/save a new property.
-   * POST properties
-   */
-  async store ({ request, response }) {
+  async store ({ auth, request, response }) {
+    const { id } = auth.user
+    const data = request.only([
+      'title',
+      'address',
+      'latitude',
+      'longitude',
+      'price'
+    ])
+
+    const property = await Property.create({...data, user_id: id})
+
+    return property
   }
 
-  /**
-   * Display a single property.
-   * GET properties/:id
-   */
   async show ({ params, request, response, view }) {
     const property = await Property.findOrFail(params.id)
 
@@ -57,10 +57,6 @@ class PropertyController {
     return property
   }
 
-  /**
-   * Delete a property with id.
-   * DELETE properties/:id
-   */
   async destroy ({ params, request, response }) {
     const property = await Property.findOrFail(params.id)
 
