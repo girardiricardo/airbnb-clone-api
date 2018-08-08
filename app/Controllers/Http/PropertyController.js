@@ -39,11 +39,22 @@ class PropertyController {
     return property
   }
 
-  /**
-   * Update property details.
-   * PUT or PATCH properties/:id
-   */
   async update ({ params, request, response }) {
+    const property = await Property.findOrFail(params.id)
+
+    const data = request.only([
+      'title',
+      'address',
+      'latitude',
+      'longitude',
+      'price'
+    ])
+
+    property.merge(data)
+
+    await property.save()
+
+    return property
   }
 
   /**
