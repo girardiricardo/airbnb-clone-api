@@ -1,7 +1,4 @@
 {
-  "engines": {
-    "node": "8.5.0"
-  },
   "name": "adonis-api-app",
   "version": "4.1.0",
   "adonis-version": "4.1.0",
